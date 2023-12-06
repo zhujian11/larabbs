@@ -7,14 +7,9 @@ use App\Models\Reply;
 
 class ReplyPolicy extends Policy
 {
-    public function update(User $user, Reply $reply)
-    {
-        // return $reply->user_id == $user->id;
-        return true;
-    }
-
     public function destroy(User $user, Reply $reply)
     {
-        return true;
+        // 回复的作者或回复话题的作者可以删
+        return $user->isAuthOf($reply) || $user->isAuthOf($reply->topic);
     }
 }
